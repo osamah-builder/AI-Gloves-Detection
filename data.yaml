@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 4
+names: ['Gloves', 'Vest', 'helmet', 'person']
+
+roboflow:
+  workspace: ppe-detection-82plm
+  project: ppe-detection-with-gloves
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/ppe-detection-82plm/ppe-detection-with-gloves/dataset/1
