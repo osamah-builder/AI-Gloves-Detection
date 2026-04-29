@@ -1,4 +1,0 @@
-gradio
-ultralytics
-opencv-python
-pillow
