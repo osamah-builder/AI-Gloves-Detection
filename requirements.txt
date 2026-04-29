@@ -1,5 +1,4 @@
-flask
+gradio
 ultralytics
 opencv-python
 pillow
-gunicorn==21.2.0

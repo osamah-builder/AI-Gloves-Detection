@@ -1,43 +1,21 @@
-from flask import Flask, request
 from ultralytics import YOLO
-import os
-
-app = Flask(__name__)
+import gradio as gr
+import cv2
 
 # تحميل المودل
-model = YOLO("runs/detect/train/weights/best.pt")
+model = YOLO("yolov8n.pt")  # أو best.pt إذا كان لديك مودل مدرب
 
-UPLOAD_FOLDER = "uploads"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+def detect(image):
+    results = model(image)
+    result_image = results[0].plot()
+    return result_image
 
-@app.route("/")
-def home():
-    return '''
-    <h2>Upload Image for Detection</h2>
-    <form action="/predict" method="post" enctype="multipart/form-data">
-        <input type="file" name="image">
-        <button type="submit">Upload</button>
-    </form>
-    '''
+interface = gr.Interface(
+    fn=detect,
+    inputs=gr.Image(type="numpy"),
+    outputs=gr.Image(type="numpy"),
+    title="AI Gloves Detection",
+    description="Upload an image and detect gloves using YOLOv8"
+)
 
-@app.route("/predict", methods=["POST"])
-def predict():
-
-    file = request.files["image"]
-
-    filepath = os.path.join(UPLOAD_FOLDER, file.filename)
-    file.save(filepath)
-
-    results = model(filepath)
-
-    results[0].save()
-
-    return "Detection completed! Check runs/detect/predict"
-
-import os
-
-import os
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port, debug=False)
+interface.launch()
